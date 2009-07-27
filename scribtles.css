@@ -1,0 +1,9 @@
+.shortened_digression:before {
+  content: '<digression>';
+}
+.shortened_digression:after {
+  content: '</digression>';
+}
+.digression, .expansion {
+  cursor: pointer;
+}
