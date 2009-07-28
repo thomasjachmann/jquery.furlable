@@ -1,11 +1,43 @@
 (function($) {
+  $.fn.animateText = function(options, callback) {
+    var defaults = {
+      duration: 500
+    };
+    var options = $.extend(defaults, options)
+    
+    var $this = $(this);
+    if (options.html == undefined) {
+      var html = '';
+      var text = this.text();
+      var from = text.length;
+      var to = 0;
+    } else {
+      var html = options.html;
+      var text = $('<div>' + html + '</div>').text();
+      var from = 0;
+      var to = text.length;
+    }
+    jQuery({animateTextCount: from}).animate({animateTextCount: to}, {
+      duration: options.duration,
+      step: function() {
+        $this.text(text.substring(0, Math.round(this.animateTextCount)));
+      },
+      complete: function() {
+        $this.html(html);
+        if (callback)
+          callback.call();
+      }
+    });
+    return this;
+  }
   $.fn.shorten = function(options) {
     var defaults = {
       slicePoint: 20,
       hasMore: '...',
       wrapperBefore: null,
       wrapperAfter: null,
-      fadeDuration: 250
+      hasMoreDuration: 100,
+      htmlDuration: 500
     };
     var options = $.extend(defaults, options);
     
@@ -26,8 +58,7 @@
       var html = '';
       html += options.wrapperBefore;
       html += startText;
-      html += '<span class="expander">' + options.hasMore + '</span>';
-      html += '<span class="expanded" style="display: none;">' + endText + '</span>';
+      html += '<span class="expanded">' + options.hasMore + '</span>';
       html += options.wrapperAfter;
       $this.html(html);
     
@@ -35,12 +66,11 @@
     
       $this.click(function() {
         var expanded = $(this).data('expanded');
+        var span = $this.find('span.expanded');
         if (expanded) {
-          $this.find('span.expanded').fadeOut(options.fadeDuration, function() {
-            $this.find('span.expander').show();
-          });
+          span.animateText({duration: options.htmlDuration}, function() { span.animateText({html: options.hasMore, duration: options.hasMoreDuration}); });
         } else {
-          $this.find('span.expander').hide().next('span.expanded').fadeIn(options.fadeDuration);
+          span.animateText({duration: options.hasMoreDuration}, function() { span.animateText({html: endText, duration: options.htmlDuration}) });
         }
         $(this).data('expanded', !expanded);
       });
