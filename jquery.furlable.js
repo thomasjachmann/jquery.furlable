@@ -4,14 +4,11 @@
   $.furlable = {
     // the defaults
     defaults: {
-      max: 20,
-      hasMore: '...',
-      wrapperBefore: null,
-      wrapperAfter: null,
-      hasMoreDuration: 100,
-      htmlDuration: 500,
-      moreText: null,
-      lessText: null
+      max:      20,     // maximum visible characters when furled
+      duration: 500,    // duration (ms) for furling
+      before:   null,   // leading wrapper of furled content
+      after:    null,   // trailing wrapper of furled content
+      hasMore:  '...',  // trailing text to display when furled (before trailing wrapper)
     },
     
     // the truncateHtml function used to truncate html
@@ -64,14 +61,14 @@
       var furl = function(to) {
         if (to != cur) {
           var furled = '';
-          furled += o.wrapperBefore;
+          furled += o.before;
           if (to < 0) {
             furled += $.furlable.truncateHtml(unfurled, o.max);
             furled += $.furlable.truncateHtml(o.hasMore, -to);
           } else {
             furled += $.furlable.truncateHtml(unfurled, o.max + to);
           }
-          furled += o.wrapperAfter;
+          furled += o.after;
           $this.html(furled);
         }
         cur = length;
@@ -82,7 +79,7 @@
       // setup animation
       var furlimate = function(from, to) {
         $({furlableCount: from}).animate({furlableCount: to}, {
-          duration: o.htmlDuration,
+          duration: o.duration,
           step: function() {
             furl(Math.round(this.furlableCount));
           }
