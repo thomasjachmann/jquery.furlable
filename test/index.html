@@ -8,6 +8,14 @@
   <script src="../jquery.furlable.js" type="text/javascript"></script>
   
   <script>
+    function delay(func) {
+      stop();
+      setTimeout(function() {
+        func();
+        start();
+      }, 20);
+    }
+    
     $(document).ready(function(){
       
       module('namespace');
@@ -64,7 +72,17 @@
       module('furlable');
       
       test('furlable functionality', function() {
-        
+        var test = $('#test');
+        test.furlable({max: 4, duration: 1});
+        equals(test.html(), '0123...', 'furled');
+        test.click();
+        delay(function() {
+          equals(test.html(), '0123456789', 'unfurled');
+          test.click();
+          delay(function() {
+            equals(test.html(), '0123...', 'refurled');
+          });
+        });
       });
     });
   </script>
@@ -84,6 +102,8 @@
  <div id="testarea" style="display: none;">
    
    <div id="overridden">...</div>
+   
+   <div id="test">0123456789</div>
    
  </div>
  

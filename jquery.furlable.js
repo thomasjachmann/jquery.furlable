@@ -61,14 +61,16 @@
       var furl = function(to) {
         if (to != cur) {
           var furled = '';
-          furled += o.before;
+          if (o.before)
+            furled += o.before;
           if (to < 0) {
             furled += $.furlable.truncateHtml(unfurled, o.max);
             furled += $.furlable.truncateHtml(o.hasMore, -to);
           } else {
             furled += $.furlable.truncateHtml(unfurled, o.max + to);
           }
-          furled += o.after;
+          if (o.after)
+            furled += o.after;
           $this.html(furled);
         }
         cur = length;
@@ -82,6 +84,9 @@
           duration: o.duration,
           step: function() {
             furl(Math.round(this.furlableCount));
+          },
+          complete: function() {
+            furl(to); // make sure it's fully animated even on very short durations
           }
         });
       };
