@@ -25,6 +25,9 @@
         ok($.furlable != undefined, '$.furlable should be defined')
       });
       
+      
+      module('defaults');
+      
       var checkDefaults = function () {
         expect(6);
         ok($.furlable.defaults != undefined, '$.furlable.defaults should be defined')
@@ -36,6 +39,7 @@
       };
       
       test('check defaults', checkDefaults);
+      
       test('check defaults after having them overridden', function () {
         $('#overridden').furlable({
           max: 30,
@@ -47,13 +51,13 @@
         checkDefaults();
       });
       
+      
+      module('truncateHtml');
+      
       test('check truncateHtml existence', function() {
         expect(1);
         equals(typeof($.furlable.truncateHtml), 'function', '$.furlable.truncateHtml should be defined');
       })
-      
-      
-      module('truncateHtml');
       
       test('truncateHtml functionality', function() {
         expect(9);
@@ -70,6 +74,11 @@
       
       
       module('furlable');
+      
+      test('check furlable existence', function() {
+        expect(1);
+        equals(typeof($('#test').furlable), 'function', '$(\'#test\').furlable should be defined')
+      });
       
       test('furlable functionality', function() {
         var test = $('#test');

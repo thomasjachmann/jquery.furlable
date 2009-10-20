@@ -14,22 +14,22 @@
     // the truncateHtml function used to truncate html
     truncateHtml: function(html, length) {
       return truncateNode($('<div/>').html(html), length).html();
-    },
+    }
   };
   
   // private function to truncate any node
-  function truncateNode(node, length) {
+  var truncateNode = function(node, length) {
     return (node.nodeType == 3) ? truncateTextNode(node, length) : truncateOtherNode(node, length);
-  }
+  };
   
   // private function to truncate plain text nodes
-  function truncateTextNode(node, length) {
+  var truncateTextNode = function(node, length) {
     var truncated = node.data.replace(/\s+/g, ' ').slice(0, length);
     return $('<div/>').text(truncated).html();
-  }
+  };
   
   // private function to truncate non plain text nodes
-  function truncateOtherNode(node, length) {
+  var truncateOtherNode = function(node, length) {
     node = $(node);
     var truncated = node.clone().empty();
     var remaining = length;
@@ -42,14 +42,17 @@
       }
     });
     return truncated;
-  }
+  };
   
   // the furlable function to initialize furlables
   $.fn.furlable = function(options) {
-    var o = $.extend({}, $.furlable.defaults, options);
+    var opts = $.extend({}, $.furlable.defaults, options);
     
     this.each(function() {
       var $this = $(this);
+      
+      // read data via the metadata plugin if present
+      var o = $.meta ? $.extend({}, opts, $this.data()) : opts;
       
       // determine parameters
       var lo = o.hasMore ? -$('<div/>').html(o.hasMore).text().length : 0;
