@@ -1,0 +1,9 @@
+h2. Purpose
+
+This "jQuery":http://jquery.com/ "plugin":http://plugins.jquery.com/ enables the furling/unfurling of arbitrary text, even text containing HTML.
+
+h2. Todos
+
+* showMore/showLess links
+* let links consume the event
+* abort and reverse animation when clicking during animation
